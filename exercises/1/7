@@ -1,0 +1,22 @@
+With a small number, the algorithm will terminate even when the root is quite far
+off the true value, since the error will be large proportionally but small in
+absolute terms.
+
+With a large number, it can be the case that there is no representable floating
+point number which is sufficiently close to the true value for the error to be
+less than the threshold.
+
+Examples:
+
+(square (sqrt-iter 1.0 0.0000004)) => 6.130198122170662e-5
+(square (sqrt-iter 1.0 100000000000000000000000000000)) => never finishes
+
+Improved solution:
+
+(define (good-enough? guess x)
+        (< (abs (- x (square guess)))
+           (* 0.0001 x)))
+
+(square (sqrt-iter 1.0 0.0000004)) =>  4.000000015983371e-7
+
+(square (sqrt-iter 1.0 100000000000000000000000000000)) => 1.0000026121502508e29

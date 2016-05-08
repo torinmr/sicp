@@ -1,0 +1,5 @@
+If applicative order is used, (p) will be evaluated before calling the test
+procedure. This will cause an infinite loop, since (p) evaluates to itself.
+
+If normal order is used, "(p)" will be substituted into the test function, which
+when evaluated will short circuit and not evaluate (p), so it will return 0.

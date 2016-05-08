@@ -1,0 +1,13 @@
+The new-if will cause an infinite loop: it will try to evaluate the second
+argument before calling the function. The second argument has a new-if
+statement, so its second argument will be evaluated, and so forth.
+
+(define (new-if predicate then-clause else-cause)
+        (cond (predicate then-clause)
+              (else else-clause)))
+
+(define (sqrt-iter guess x)
+        (new-if (good-enough? guess x)
+                guess
+                (sqrt-iter (improve guess x)
+                           x)))

@@ -1,0 +1,11 @@
+Assumes rows and columns are one-indexed.
+
+Return 0 if outside the triangle.
+Return 1 if top of triangle.
+Return sum of parents otherwise.
+
+(define (pascal r c)
+        (cond ((or (> c r) (< c 1) (< r 1)) 0)
+              ((= r 1) 1)
+              (else (+ (pascal (- r 1) (- c 1))
+                       (pascal (- r 1) c)))))
