@@ -45,3 +45,14 @@
          __/ |
         /    |
 (cc 1 0)    (cc 0 1)
+
+Space required grows with order N, since the tree is of maximum depth N+5. Time
+grows with order n^5, by the following argument by induction:
+
+If there is one currency, running time is order N.
+
+If there are M currencies, then running time is order N * the running time with
+M-1 currencies. The reason is that the current currency can be applied order N
+times, and then at each of these points we can move on to the next currency,
+creating a subproblem of average size N/2 = order N with M-1 currencies. Thus,
+running time with M currencies is order N^M.

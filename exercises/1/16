@@ -1,0 +1,13 @@
+Recursive solution (from text):
+
+(define (fast-expt b n)
+  (cond ((= n 0) 1)
+  ((even? n) (square (fast-expt b (/ n 2))))
+  ( else (* b (fast-expt b (- n 1))))))
+
+(define (fast-iter-expt b n)
+  (define (iter-expt a b n)
+    (cond ((< n 1) a)
+          ((even? n) (iter-expt a (square b) (/ n 2)))
+          (else (iter-expt (* b a) b (- n 1)))))
+  (iter-expt 1 b n))

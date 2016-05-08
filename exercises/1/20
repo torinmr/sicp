@@ -1,0 +1,56 @@
+Applicative:
+
+(gcd 206 40)
+(gcd 40 (remainder 206 40))
+(gcd 40 6)
+(gcd 6 (remainder 40 6))
+(gcd 6 4)
+(gcd 4 (remainder 6 4))
+(gcd 4 2)
+(gcd 2 (remainder 4 2))
+(gcd 2 0)
+2
+
+Normal:
+
+(gcd 206 40)
+(gcd 40 (remainder 206 40))
+(if (= (remainder 206 40) 0) ...
+(if (= 6 0) ...
+(gcd (6 (remainder 40 6))
+(if (= (remainder 40 6) 0) ...
+(if (= 4 0) ...
+(gcd 4 (remainder 6 4))
+(if (= (remainder 6 4) 0) ...
+(if (= 2 0) ...
+(gcd 2 (remainder 4 2))
+(if (= (remainder 4 2) 0) ...
+(if (= 0 0) ...
+2
+
+remainder is evaluated four times in either case, since the if forces the
+evaluation of the second argument.
+
+=======
+
+First attempt wrong, because I assumed that once evaluation of an argument had
+been forced, future uses of that argument would use the evaluated value rather
+than the full expression. Attempt two without this assumption:
+
+(gcd 206 40)
+(gcd 40 (remainder 206 40))
+(if (= (remainder 206 40) 0) ...
+(if (= 6 0) ...
+(gcd ((remainder 206 40) (remainder 40 (remainder 206 40)))
+(if (= (remainder 40 (remainder 206 40)) 0) ...
+(if (= 4 0) ...
+(gcd (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40))))
+(if (= (remainder (remainder 206 40) (remainder 40 (remainder 206 40))) 0) ...
+(if (= 2 0) ...
+(gcd (remainder (remainder 206 40) (remainder 40 (remainder 206 40))) (remainder (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))))
+(if (= (remainder (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))) 0) ...
+(if (= 0 0) ...
+(remainder (remainder 206 40) (remainder 40 (remainder 206 40)))
+2
+
+18 calls to remainder
