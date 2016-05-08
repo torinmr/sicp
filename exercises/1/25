@@ -1,0 +1,3 @@
+No, she is not correct. Her procedure creates an intermediate result of
+exponential size, meaning that the arithmetic operations will take an enormous
+amount longer to complete.

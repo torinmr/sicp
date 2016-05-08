@@ -1,0 +1,13 @@
+(define (check-all n)
+  (define (loop a)
+    (cond ((= a n) true)
+          ((= (expmod a n n) a) (loop (+ a 1)))
+          (else false)))
+  (loop 1))
+
+(check-all 561)
+(check-all 1105)
+(check-all 1729)
+(check-all 2465)
+(check-all 2821)
+(check-all 6601)

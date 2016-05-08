@@ -1,0 +1,4 @@
+Each call to expmod now generates two child calls instead of one, so the number
+of calls is now exponential in the depth of the process tree rather than
+linear. Since the process tree still has a logarithmic depth, the total number
+of calls is now linear in the size of the input.

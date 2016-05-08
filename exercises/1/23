@@ -1,0 +1,22 @@
+(define (next x)
+  (if (= 2 x)
+      3
+      (+ 2 x)))
+
+(define (divides? a b)
+  (= (remainder b a) 0))
+
+(define (smallest-divisor n)
+  (define (find-divisor n test-divisor)
+    (cond ((> (square test-divisor) n) n)
+          ((divides? test-divisor n) test-divisor)
+          (else (find-divisor n (next test-divisor)))))
+  (find-divisor n 2))
+
+(search-for-primes 100000000000000 3) takes 6.7 seconds/prime with this
+optimization, rather than the original 10.9 seconds. This is not quite a 2x
+speed up expected.
+
+One possible explanation for this is that the (next) procedure is more expensive
+than simply adding one, and so the added expense of executing this absorbs some
+of the benefit of reducing the number of iterations.

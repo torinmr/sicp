@@ -1,0 +1,32 @@
+(define (prime? x)
+  (= x (smallest-divisor x)))
+
+(define (time-prime-test n)
+  (newline)
+  (display n)
+  (start-prime-test n (runtime)))
+
+(define (start-prime-test n start-time)
+  (if (prime? n)
+      (report-prime (- (runtime) start-time))
+      #f))
+
+(define (report-prime elapsed-time)
+  (display " *** ")
+  (display elapsed-time)
+  #t)
+
+;; Search for the first <number> primes starting at <start>.
+(define (search-for-primes start number)
+  (cond ((= number 0) ())
+        ((time-prime-test start) (search-for-primes (+ start 1) (- number 1)))
+        (else (search-for-primes (+ start 1) number))))
+
+
+(search-for-primes 100000000000 3) => .4/prime
+(search-for-primes 1000000000000 3) => 1.1/prime
+(search-for-primes 10000000000000 3) => 3.4/prime
+(search-for-primes 100000000000000 3) => 10.9/prime
+
+The observed ratio is a bit over 3, which is very close to the square root of
+10. Thus, it appears the estimate of the running time is a good one.
