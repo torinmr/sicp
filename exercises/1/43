@@ -1,0 +1,2 @@
+(define (repeated f n)
+  (accumulate compose identity (lambda (i) f) 1 inc n))

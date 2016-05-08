@@ -1,0 +1,20 @@
+(define (average x y)
+  (/ (+ x y) 2))
+
+(define (average-damp f)
+  (lambda (x) (average x (f x))))
+
+(define (pow b n)
+  (product (lambda (i) b) 1 inc n))
+
+(define (root-dampened x n num_damps)
+  (fixed-point ((repeated average-damp num_damps)
+                (lambda (y) (/ x (pow y (- n 1)))))
+               1.0))
+
+Roots less than 4th require one damping. Those less than 8 require two, less
+than 16 three, and so forth. The pattern is that n dampings suffices for numbers
+less than 2^(n+1). This gives the following general procedure:
+
+(define (root x n)
+  (root-dampened x n (floor (/ (log n) (log 2)))))
