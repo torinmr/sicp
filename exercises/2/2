@@ -1,0 +1,36 @@
+(define (make-segment start end)
+  (cons start end))
+
+(define (start-segment line)
+  (car line))
+
+(define (end-segment line)
+  (cdr line))
+
+(define (make-point x y)
+  (cons x y))
+
+(define (x-point point)
+  (car point))
+
+(define (y-point point)
+  (cdr point))
+
+(define (print-point p)
+  (newline)
+  (display "(")
+  (display (x-point p))
+  (display ",")
+  (display (y-point p))
+  (display ")"))
+
+(define (average a b)
+  (/ (+ a b) 2))
+
+(define (midpoint-segment s)
+  (let ((p1 (start-segment s))
+        (p2 (end-segment s)))
+    (make-point (average (x-point p1) (x-point p2))
+                (average (y-point p1) (y-point p2)))))
+
+(print-point (midpoint-segment (make-segment (make-point 1 2) (make-point 4 4))))
