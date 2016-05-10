@@ -1,0 +1,9 @@
+She is correct. The rules for combining intervals always compute the "worst
+case" scenario, assuming that either operand can take on any value in its range
+to determine the smallest and largest possible values of the result. However, if
+two operands represent the same measurement, then they can't take on any
+combination of values - they must of course take on the same value.
+
+For example, the upper bound of A/B (for positive numbers) is (upper A) / (lower
+B). But of course if A and B are the same measurement, the upper and lower bound
+must both be one.

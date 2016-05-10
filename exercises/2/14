@@ -1,0 +1,10 @@
+(define a (make-center-percent 10 1))
+(define b (make-center-percent 20 1))
+(define (print a)
+  (newline)
+  (display (center a))
+  (display " ")
+  (display (percent a)))
+
+Every time an operation such as A/B or A/A is performed, the percentage
+tolerance doubles. So, there is no multiplicative inverse: B * A/A != B.

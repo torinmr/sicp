@@ -1,0 +1,16 @@
+Suppose we have two quantities, a+-at, and b+-bu. Assume that t and u << 100%,
+and that all quantities are positive.
+
+The exact interval of their product is:
+
+(a-at)(b-bu) : (a+at)(b+bu)
+ab - abt - abu + abtu : ab + abt + abu + abtu
+
+If t and u are very small, we can decide to ignore the abtu factors, as they
+will be a factor of 1/(min t u) smaller than the other terms.
+
+ab - abt - abu : ab + abt + abu
+
+Thus, the result is approximated by ab +- ab(t + u). In other words, the
+percentage tolerance of the product is approximately the sum of the percentage
+tolerances of the operands.
