@@ -1,0 +1,30 @@
+(define (inc x)
+  (+ x 1))
+
+(define zero (lambda (f) (lambda (x) x)))
+
+(define (add-1 n)
+  (lambda (f) (lambda (x) (f ((n f) x)))))
+
+;; Find the value of one by substitution:
+
+(add-1 zero)
+(add-1 (lambda (f) (lambda (x) x)))
+(lambda (f) (lambda (x) (f (((lambda (f) (lambda (x) x)) f) x))))
+(lambda (f) (lambda (x) (f ((lambda (x) x) x))))
+(lambda (f) (lambda (x) (f x)))
+(define one (lambda (f) (lambda (x) (f x))))
+
+;; Do likewise for two:
+(add-1 one)
+(add-1 (lambda (f) (lambda (x) (f x))))
+(lambda (f) (lambda (x) (f (((lambda (f) (lambda (x) (f x))) f) x))))
+(lambda (f) (lambda (x) (f ((lambda (x) (f x)) x))))
+(lambda (f) (lambda (x) (f (f x))))
+(define two (lambda (f) (lambda (x) (f (f x)))))
+
+(define (add n m)
+  (lambda (f) (lambda (x) ((m f) ((n f) x)))))
+
+(define (get-num n)
+  ((n inc) 0))

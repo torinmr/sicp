@@ -1,0 +1,19 @@
+(define (pow b n)
+  (if (= n 0)
+      1
+      (* b (pow b (- n 1)))))
+
+;; If x = a * b^n for a relatively prime to b, then this procedure returns n.
+(define (num_factors x b)
+  (if (= 0 (remainder x b))
+      (+ 1 (num_factors (/ x b) b))
+      0))
+
+(define (cons x y)
+  (* (pow 2 x) (pow 3 y)))
+
+(define (car z)
+  (num_factors z 2))
+
+(define (cdr z)
+  (num_factors z 3))

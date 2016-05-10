@@ -1,0 +1,17 @@
+(define (cons x y)
+  (lambda (m) (m x y)))
+
+(define (car z)
+  (z (lambda (p q) p)))
+
+;; Let's trace the execution of (car (cons x y)) using the substitution model.
+(car (cons x y))
+(car (lambda (m) (m x y)))
+((lambda (m) (m x y)) (lambda (p q) p))
+((lambda (p q) p) x y)
+x
+
+;; So similarly cdr is defined as follows:
+
+(define (cdr z)
+  (z (lambda (p q) q)))

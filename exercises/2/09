@@ -1,0 +1,14 @@
+Suppose we have intervals (a, b) and (c, d). Their respective widths are (b - a)
+and (d - c), respectively. If we add them we get (a, b) + (c, d) = (a+c, b+d),
+which has width (b + d) - (a + c) = (b - a) + (d - c), a function of their
+widths.  If we subtract, we have (a, b) - (c, d) = (a-c, b-d), which has width
+(b-d) - (a-c) = (b - a) - (d - c), also a function of their widths.
+
+For multiplication, let's consider an example. (1, 2) * (2, 3) = (2, 6), so two
+intervals with width 1 create one with width 4. However, (2, 3) * (3, 4) = (6,
+12), so two different intervals with width one create an interval with width
+6. Thus, width of the product is not a function of the widths of the operands.
+
+Similarly, (1, 2) / (1/4, 1/2) = (2, 8), so widths of 1 and 1/4 created a result
+of width 6. But (1, 2) / (1/2, 3/4) = (4/3, 4), so the same widths of 1 and 1/4
+created a result of width 2 2/3.
