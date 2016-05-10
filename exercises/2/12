@@ -8,7 +8,7 @@
   (/ (- (upper-bound i) (lower-bound i)) 2))
 
 (define (make-center-percent c p)
-  (make-center-width c (* c p 0.01)))
+  (make-center-width c (abs (* c p 0.01))))
 
 (define (percent i)
   (* 100 (/ (width i) (center i))))
