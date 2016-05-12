@@ -1,0 +1,20 @@
+The first attempt does not work because it cons up the list starting from the
+first element: (cons second (cons first nil)) and so forth.
+
+The second attempt doesn't work either, as it just produces a "list" in an
+incorrect format, where the car and cdr are swapped:
+
+(cons (cons nil first) second)
+
+This isn't a valid list, and even if we wrote programs capable of parsing lists
+in this format, it would still be in the reversed order.
+
+In general, it doesn't seem possible to implement a map-like procedure over
+lists without evolving a recursive process, or at least creating an iterative
+process that simulates a recursive process. The reason for this is that we must
+iterate all the way down the list to find the last element, and then we must
+build up the result list starting with this element, working our way back to the
+beginning.
+
+If we could create a doubly-linked list type in scheme we would be able to do
+this, however.
