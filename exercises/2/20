@@ -1,0 +1,9 @@
+(define (same-parity n . rest)
+  (define (helper l)
+    (cond ((null? l)
+           l)
+          ((even? (+ n (car l)))
+           (cons (car l) (helper (cdr l))))
+          (else
+           (helper (cdr l)))))
+  (helper (cons n rest)))
