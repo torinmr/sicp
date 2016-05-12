@@ -1,0 +1,33 @@
+I don't have a clean solution to the problem, but here's one idea:
+
+For each interval, users must assign it a name when they create it. The same
+name should only be used for intervals which represent the same uncertain
+quantity. For example, in computing the expression A + A, where A = [x, y], users
+should write:
+
+(add-interval (make-interval x y "A")
+              (make-interval x y "A"))
+
+Instead of (add-interval (make-interval x y "A")
+                         (make-interval x y "B")).
+
+In the new interval system, these expressions have different meanings - the
+former says "an uncertain quantity with the range [x, y] is added to itself,"
+while the latter says "two different uncertain quantities, both with the range
+[x, y], are added together."
+
+The system would then apply different arithmetical rules when the IDs and bounds
+of two operands are the same. For example, (div-interval) would always return
+the interval [1, 1] when given intervals with the same ID and bounds.
+
+The system described so far correctly computes bounds for expressions like
+squaring an interval and dividing an interval by itself. It can be further
+extended by saying that the ID given to the result of an operation is a
+deterministic function of the operation and the IDs of the component
+operations. For example, thie ID of "A" * "B" could be "A*B", or something of
+that sort. This would mean expressions such as (A * B) / (A * B) could be
+correctly computed.
+
+This system helps in some cases, but still cannot compute correct intervals for
+expressions such as (A * B / A), which requires algebraic rewriting to reduce to
+a form that is correctly handled by these rules.
