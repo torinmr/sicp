@@ -1,0 +1,15 @@
+(define (subsets s)
+  (define (f subset)
+    (cons (car s) subset))
+  (if (null? s)
+      (list '())
+      (let ((rest (subsets (cdr s))))
+        (append rest (map f rest)))))
+
+This is similar to the counting change problem. Given a set of elements, A1
+through An, we can divide the set of subsets into two parts: those subsets which
+do not contain A1, and those which do. The former can be computed by recursively
+calculating the set of all subsets of the set containing A2 through An. The
+latter can be calculated by taking this result and prepending A1 to every
+subset. Finally, the base case of the recursion is provided by the fact that the
+only subset of the empty set is the empty set.

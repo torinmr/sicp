@@ -1,0 +1,3 @@
+(define (fringe t)
+  (cond ((null? t) '())
+        ((pair? t) (append (fringe (car t)) (fring (cdr t)))

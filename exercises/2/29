@@ -1,0 +1,50 @@
+(define (make-mobile left right)
+  (list left right))
+
+(define (make-branch length structure)
+  (list length structure))
+
+(define left-branch car)
+(define right-branch cadr)
+
+(define branch-length car)
+(define branch-structure cadr)
+
+(define (structure-weight structure)
+  (if (pair? structure)
+      (total-weight structure)
+      structure))
+
+(define (total-weight mobile)
+  (+ (structure-weight (branch-structure (left-branch mobile)))
+     (structure-weight (branch-structure (right-branch mobile)))))
+
+(define (structure-balanced? structure)
+  (if (pair? structure)
+      (balanced? structure)
+      true))
+
+(define (balanced? mobile)
+  (let ((l (left-branch mobile))
+        (r (right-branch mobile)))
+    (and (structure-balanced? (branch-structure l))
+         (structure-balanced? (branch-structure r))
+         (= (* (branch-length l) (structure-weight (branch-structure l)))
+            (* (branch-length r) (structure-weight (branch-structure r)))))))
+
+(make-mobile (make-branch 1 (make-mobile (make-branch 2 2) (make-branch 2 2))) (make-branch 4 1))
+
+;; Alternative definitions using cons instead of lists.
+;; Since we used only the abstract operations in the implementations of
+;; total-weight and balanced?, no changes are needed.
+(define (make-mobile left right)
+  (cons left right))
+
+(define (make-branch length structure)
+  (cons length structure))
+
+(define left-branch car)
+(define right-branch cdr)
+
+(define branch-length car)
+(define branch-structure cdr)
