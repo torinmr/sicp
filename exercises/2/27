@@ -1,0 +1,9 @@
+(define (deep-reverse l)
+  (define (iter l r)
+    (cond ((null? l)
+           r)
+          ((pair? (car l))
+           (iter (cdr l) (cons (deep-reverse (car l)) r)))
+          (else
+           (iter (cdr l) (cons (car l) r)))))
+  (iter l '()))
