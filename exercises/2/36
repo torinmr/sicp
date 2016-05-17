@@ -1,0 +1,14 @@
+(define (accumulate-n op init seqs)
+  (if (null? (car seqs))
+      '()
+      (cons (accumulate op init (map car seqs))
+            (accumulate-n op init (map cdr seqs)))))
+
+;; Bonus - define the extended version of the map procedure.
+(define (map f . seqs)
+  (cond ((null? (car seqs)) '())
+        ((= 1 (length seqs))
+         (cons (f (car (car seqs)))
+               (map f (cdr (car seqs)))))
+        (else (cons (apply f (map car seqs))
+                    (apply map f (map cdr seqs))))))
