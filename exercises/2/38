@@ -1,0 +1,25 @@
+(define (fold-left op initial sequence)
+  (define (iter result rest)
+    (if (null? rest)
+        result
+        (iter (op result (car rest))
+              (cdr rest))))
+  (iter initial sequence))
+
+(fold-right / 1 (list 1 2 3)) => 3/2
+(fold-left / 1 (list 1 2 3))  => 3/2 WRONG
+                              => 1/6 (Start with initial, apply op to each successive item with
+                                      running total on left)
+
+(fold-right list '() (list 1 2 3)) => (1 (2 (3 ())))
+(fold-left list '() (list 1 2 3))  => (3 (2 (1 ()))) WRONG
+                                   => (((() 1) 2) 3)
+
+;; Bonus problem:
+(fold-right cons '() (list 1 2 3)) => (1 2 3)
+(fold-left cons '() (list 1 2 3)) => (((() . 1) . 2) . 3)
+
+;; In other words: (fold-right % 0 '(a b c)) = (a % (b % (c % 0)))
+                   (fold-left % 0 '(a b c)) = (((0 % a) % b) % c)
+
+;; An operator must be associative for fold-left and fold-right to be equivalent.

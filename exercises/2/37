@@ -1,2 +1,15 @@
 (define (dot-product v w)
   (accumulate + 0 (map * v w)))
+
+(define (matrix-*-vector m v)
+  (map (lambda (mi) (dot-product mi v)) m))
+
+(define (transpose m)
+  (accumulate-n cons '() m))
+
+(define (matrix-*-matrix m n)
+  (let ((cols (transpose n)))
+    (map (lambda (row)
+           (map (lambda (col) (dot-product row col))
+                cols))
+         m)))
