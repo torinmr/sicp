@@ -1,0 +1,34 @@
+(define (equal? a b)
+  (cond ((null? a) (null? b))
+        ((list? a) (and (list? b)
+                        (equal? (car a)
+                                (car b))
+                        (equal? (cdr a)
+                                (cdr b))))
+        (else (eq? a b))))
+
+;; Tests
+(assert (equal?
+        '(this is a list)
+        '(this is a list)))
+(assert (not (equal?
+              '(this is a list)
+              '(this (is a) list))))
+(assert (equal?
+         '()
+         '()))
+(assert (not (equal?
+              '()
+              '(a))))
+(assert (equal?
+         '(a)
+         '(a)))
+(assert (not (equal?
+              '(a)
+              '(b))))
+(assert (equal?
+         '((((a))))
+         '((((a))))))
+(assert (not (equal?
+              '((((a))))
+              '(((a))))))

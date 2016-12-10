@@ -6,8 +6,5 @@
              (enumerate-interval 1 n)))
 
 (define (prime-sum-pairs n)
-  (map
-
-(define (prime-sum-pairs n)
   (map make-pair-sum
        (filter prime-sum? (unique-pairs n))))

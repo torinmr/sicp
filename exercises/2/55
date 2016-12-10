@@ -1,0 +1,8 @@
+(car ''abracadabra)
+
+Is just syntactic sugar for
+
+(car (quote (quote abracadabra)))
+
+The outermost quote call returns the symbolic expression (quote abracadabra),
+and the car then takes the first element of this, the symbol quote.
