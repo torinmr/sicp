@@ -1,0 +1,31 @@
+(define (queens board-size)
+  ;; Board representation: list of (row, column) pairs.
+  (define empty-board '())
+  (define (adjoin-position new-row k rest-of-queens)
+    (cons (cons new-row k) rest-of-queens))
+  (define (safe? positions)
+    (define (iter pos board)
+      (if (null? board)
+          true
+          (let ((r (car pos))
+                (c (cdr pos))
+                (s (caar board))
+                (d (cdar board)))
+            (cond ((= r s) false)
+                  ((= c d) false)
+                  ((= (abs (- r s))
+                      (abs (- c d))) false)
+                  (else (iter pos (cdr board)))))))
+    (iter (car positions) (cdr positions)))
+  (define (queen-cols k)
+    (if (= k 0)
+        (list empty-board)
+        (filter
+          safe?
+          (flatmap
+            (lambda (rest-of-queens)
+              (map (lambda (new-row)
+                     (adjoin-position new-row k rest-of-queens))
+                   (enumerate-interval 1 board-size)))
+            (queen-cols (- k 1))))))
+  (queen-cols board-size))

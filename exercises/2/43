@@ -1,0 +1,63 @@
+;; Louis's program:
+
+(define (queens board-size)
+  ;; Board representation: list of (row, column) pairs.
+  (define empty-board '())
+  (define (adjoin-position new-row k rest-of-queens)
+    (cons (cons new-row k) rest-of-queens))
+  (define (safe? positions)
+    (define (iter pos board)
+      (if (null? board)
+          true
+          (let ((r (car pos))
+                (c (cdr pos))
+                (s (caar board))
+                (d (cdar board)))
+            (cond ((= r s) false)
+                  ((= c d) false)
+                  ((= (abs (- r s))
+                      (abs (- c d))) false)
+                  (else (iter pos (cdr board)))))))
+    (iter (car positions) (cdr positions)))
+  (define (queen-cols k)
+    (if (= k 0)
+        (list empty-board)
+        (filter
+          safe?
+          (flatmap
+            (lambda (new-row)
+              (map (lambda (rest-of-queens)
+                     (adjoin-position new-row k rest-of-queens))
+                   (queen-cols (- k 1))))
+              (enumerate-interval 1 board-size)))))
+  (queen-cols board-size))
+
+
+In iterative form, the original program does the following to generate the
+candidate positions:
+
+For each position in (queen-cols (- k 1)):
+    For each number in [1, board-size]:
+        Add the number to the position.
+
+Louis's version does this instead:
+
+For each number in [1, board-size]:
+    For each position in (queen-cols (- k 1)):
+        Add the number to the position.
+
+In this form, it is easy to see that Louis's version calls (queen-cols)
+board-size times instead of once, causing an exponential explosion of the
+recursion.
+
+Let's assume that the cost of execution is proportional to the number of calls
+to queen-cols. For the original program, the cost is thus board-size + 1. For
+Louis's version, we can solve a recurrence.
+
+Calling (queen-cols 0) is just one call.
+Calling (queen-cols 1) is 1 + 8 calls.
+In general, COST(queen-cols n) = 1 + 8*COST(queen-cols n).
+
+Thus, COST(queen-cols 8) = 8^8 + 8^7 + ... + 8 + 1 ~= 8^8
+
+Thus, the cost in terms of T is approximately 8^7 * T.
