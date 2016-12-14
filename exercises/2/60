@@ -1,0 +1,23 @@
+(load "unordered-list-set")
+
+;; element-of-set? is unchanged
+
+(define adjoin-set cons)
+
+(define union-set append)
+
+;; intersection-set is unchanged
+
+This representation makes adjoin-set and union-set take constant time. However,
+element-of-set? and intersection-set still take O(n) and O(n^2) time in the size
+of the representation of the set, respectively. Furthermore, the size of the
+representation of the set can grow greater than O(n) if many unions or adjoins
+with duplicate items are performed.
+
+So, in applications where adjoin and union are called more frequently than
+element-of-set? and intersection-set, and/or where there not are many duplicate
+items, this implementation would be faster.
+
+For example, suppose I wished to add a series of random IDs to a set, and then
+on occasion check to see whether an ID had been entered into the set. In this
+case, this implementation would be much faster than the other one.
