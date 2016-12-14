@@ -1,5 +1,4 @@
 (load "unordered-list-set")
-(load "set-util")
 
 (define (union-set set1 set2)
   (cond ((null? set1) set2)
