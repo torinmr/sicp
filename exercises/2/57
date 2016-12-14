@@ -1,0 +1,19 @@
+(load "deriv.scm")
+
+(define (make-sum a1 . as)
+  (cons '+ (cons a1 as)))
+
+(define (addend s) (cadr s))
+
+(define (augend s)
+  (cond ((eq? (cdddr s) '()) (caddr s))
+        (else (cons '+ (cddr s)))))
+
+(define (make-product m1 . ms)
+  (cons '* (cons m1 ms)))
+
+(define (multiplier p) (cadr p))
+
+(define (multiplicand s)
+  (cond ((eq? (cdddr s) '()) (caddr s))
+        (else (cons '* (cddr s)))))

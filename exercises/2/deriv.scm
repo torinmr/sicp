@@ -6,6 +6,9 @@
 (define (=number? exp num)
   (and (number? exp) (= num exp)))
 
+(define (sum? x)
+  (and (pair? x) (eq? (car x) '+)))
+
 (define (make-sum a1 a2)
   (cond ((=number? a1 0) a2)
         ((=number? a2 0) a1)
@@ -13,12 +16,12 @@
          (+ a1 a2))
         (else (list '+ a1 a2))))
 
-(define (sum? x)
-  (and (pair? x) (eq? (car x) '+)))
-
 (define (addend s) (cadr s))
 
 (define (augend s) (caddr s))
+
+(define (product? x)
+  (and (pair? x) (eq? (car x) '*)))
 
 (define (make-product m1 m2)
   (cond ((=number? m1 0) 0)
@@ -28,9 +31,6 @@
         ((and (number? m1) (number? m2))
          (* m1 m2))
         (else (list '* m1 m2))))
-
-(define (product? x)
-  (and (pair? x) (eq? (car x) '*)))
 
 (define (multiplier p) (cadr p))
 
