@@ -1,0 +1,87 @@
+(load "tree-set")
+(load "63")
+(load "64")
+
+(define (enumerate n)
+  (define (iter i)
+    (cond ((> i n) '())
+          (else (cons i (iter (+ 1 i))))))
+  (iter 1))
+
+
+;; Copied from ordered-list-set
+(define (intersection-list-set set1 set2)
+  (if (or (null? set1) (null? set2))
+      '()
+      (let ((x1 (car set1)) (x2 (car set2)))
+        (cond ((= x1 x2)
+               (cons x1
+                     (intersection-list-set (cdr set1)
+                                            (cdr set2))))
+              ((< x1 x2)
+               (intersection-list-set (cdr set1) set2))
+              ((< x2 x1)
+               (intersection-list-set set1 (cdr set2)))))))
+
+;; Copied from 62.
+(define (union-list-set set1 set2)
+  (cond ((null? set1) set2)
+        ((null? set2) set1)
+        (else
+         (let ((x1 (car set1)) (x2 (car set2)))
+           (cond ((= x1 x2)
+                  (cons x1
+                        (union-list-set (cdr set1)
+                                        (cdr set2))))
+                 ((< x1 x2)
+                  (cons x1
+                        (union-list-set (cdr set1)
+                                        set2)))
+                 ((< x2 x1)
+                  (cons x2
+                        (union-list-set set1
+                                        (cdr set2)))))))))
+
+(define (intersection-set set1 set2)
+  (list->tree (intersection-list-set (tree->list-2 set1)
+                                     (tree->list-2 set2))))
+
+(assert (equal? (intersection-set (list->tree '(1 3 4 5))
+                                  (list->tree '(1 2 3 5)))
+                (list->tree '(1 3 5))))
+(assert (equal? (intersection-set '()
+                                  (list->tree '(1 2 3 5)))
+                '()))
+(assert (equal? (intersection-set (list->tree '(1 2 3 5))
+                                  '())
+                '()))
+(assert (equal? (list->tree (enumerate 10000))
+                (intersection-set (list->tree (enumerate 10000))
+                                  (list->tree (enumerate 10000)))))
+
+(define (union-set set1 set2)
+  (list->tree (union-list-set (tree->list-2 set1)
+                              (tree->list-2 set2))))
+
+(assert (equal? '() (union-set '() '())))
+(assert (equal? (list->tree '(1))
+                (union-set (list->tree '(1))
+                           '())))
+(assert (equal? (list->tree '(1 2))
+                (union-set '()
+                           (list->tree '(1 2)))))
+(assert (equal? (list->tree '(1 2))
+                (union-set (list->tree '(1))
+                           (list->tree '(2)))))
+(assert (equal? (list->tree '(1 2))
+                (union-set (list->tree '(2))
+                           (list->tree '(1)))))
+(assert (equal? (list->tree '(1 2 3 4 5))
+                (union-set (list->tree '(1 2 5))
+                           (list->tree '(3 4)))))
+(assert (equal? (list->tree '(1 2 3 4 5))
+                (union-set (list->tree '(3 4))
+                           (list->tree '(1 2 5)))))
+(assert (equal? (list->tree (enumerate 10000))
+                (union-set (list->tree (enumerate 10000))
+                           (list->tree (enumerate 10000)))))
