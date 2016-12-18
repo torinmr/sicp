@@ -1,0 +1,30 @@
+At each step, the most recently merged tree will be smaller than the next leaf
+node, so the resulting tree will look like this for n=5:
+
+      ({A B C D E} 31)
+      /\
+(E 16)  ({A B C D} 15)
+        /\
+   (D 8)  ({A B C} 7)
+          /\
+     (C 4)  ({A B} 3)
+            /\
+       (B 2)  (A 1)
+
+For n=10, it will look like this (without weights and symbol sets):
+
+ /\
+J /\
+ I /\
+  H /\
+   G /\
+    F /\
+     E /\
+      D /\
+       C /\
+        B  A
+
+In general, for a tree of n symbols, 1 bit is required to encode the most
+frequently used symbol, and n-1 bits are required to encode the least frequently
+used. (This is not n because n-1 bits are used for both the least frequent and
+second least frequent symbols.)

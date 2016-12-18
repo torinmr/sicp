@@ -1,0 +1,43 @@
+Let's consider the case where we have a message which contains (2^n - 1) symbols
+from an alphabet of n distinct symbols, with the symbols having the relative
+frequency described in 71 (i.e. the
+
+The encode procedure makes one call to encode-symbol for each symbol in the
+message. Besides this call, all operations take constant time except for the
+append operation, which takes time proportional to the number of bits in the
+representation of the symbol being considered. Thus, the total time spent in
+encode, not including encode-symbol, is:
+
+O(n*1 + n*2 + (n-1)*4 + ... + 1*2^(n-1)) = O(2^n)
+
+Now, let's analyze a call to encode-symbol, for the ith symbol (the one with
+frequency 2^(i-1)). encode-symbol is called once for each level of the tree
+traversed, for a total of (i+1) calls if i < n, or i calls if i == n. In each
+call on a non-leaf node, in-list? is called on the left branch, which always
+takes constant time (since the left branch always has one element). Then,
+in-list? is called on the right branch. This list contains (n - [current tree
+level]) elements, and the desired element is at the (i - [current tree level])th
+position, so this step takes O(i - [current tree level]) time. All the other
+operations in encode-symbol are constant time.
+
+So, a call to encode-symbol for the ith symbol takes O(i^2) time: constant +
+O(i) = O(i) time at the first level, constant + O(i-1) = O(i), and so on down to
+the final recursive step, which is constant time.
+
+So, encoding the most frequent symbol is O(1), while encoding the least frequent
+is O(n^2). Note that this does not change the running time for encoding the
+whole message, which is:
+
+O(2^n + 4*2^(n-1) + 9*2^(n-2) + 16*2^(n-3) + 25*2^(n-4) + 36*2^(n-5) + ...)
+= O(2^n * SUM_{1-n}(i^2/2^i))
+= O(2^n * SUM_{1->n}(i^2/2^i))
+
+We can prove that SUM_{1->n}(i^2/2^i) is convergent using the ratio test:
+
+((i+1)^2 / 2^(i+1)) / (i^2 / 2^i))
+= (1/2) (i+1)^2/i^2
+= (1/2) (i^2 + 2i + 1)/i^2
+= (1/2) (1 + 2/i + 1/i^2)
+
+Which approaches 1/2 as i approaches infinity, proving the series is
+convergent. Thus, the running time is O(2^n) for encoding a complete message.
