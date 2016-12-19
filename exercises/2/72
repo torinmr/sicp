@@ -13,9 +13,9 @@ O(n*1 + n*2 + (n-1)*4 + ... + 1*2^(n-1)) = O(2^n)
 Now, let's analyze a call to encode-symbol, for the ith symbol (the one with
 frequency 2^(i-1)). encode-symbol is called once for each level of the tree
 traversed, for a total of (i+1) calls if i < n, or i calls if i == n. In each
-call on a non-leaf node, in-list? is called on the left branch, which always
+call on a non-leaf node, member is called on the left branch, which always
 takes constant time (since the left branch always has one element). Then,
-in-list? is called on the right branch. This list contains (n - [current tree
+member is called on the right branch. This list contains (n - [current tree
 level]) elements, and the desired element is at the (i - [current tree level])th
 position, so this step takes O(i - [current tree level]) time. All the other
 operations in encode-symbol are constant time.
@@ -41,3 +41,16 @@ We can prove that SUM_{1->n}(i^2/2^i) is convergent using the ratio test:
 
 Which approaches 1/2 as i approaches infinity, proving the series is
 convergent. Thus, the running time is O(2^n) for encoding a complete message.
+
+Note that this answer can be different depending on the specific implementation
+of encode-symbol and generate-huffman-tree. For example, if the huffman tree
+implementation prefers to put smaller nodes on the right, but encode-symbol
+searches the left subtree first (or vice-versa), then looking up the most
+frequent symbol will become O(n), as the entire symbol list for the subtree
+which doesn't contain the symbol will be searched.
+
+Conversely, if we changed encode-symbol so that it assumed any symbol not in the
+left subtree was in the right subtree without calling member (and just
+returned an error if it eventually got to a leaf node which was not the
+requested symbol), then it would only take O(n) time to look up the
+least-frequent symbol.
