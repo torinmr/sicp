@@ -1,0 +1,39 @@
+;; a) This will lead to an infinite loop. The apply-generic procedure will fail
+;; to find an 'exp operation for the types '(complex complex), so it will look
+;; for type coercion procedures to convert the first type to the second, and
+;; vice versa. Finding an operation complex->complex, it will apply it and call
+;; apply-generic again, with identical arguments.
+
+;; b) Louis was incorrect - since coercing to the same type does not accomplish
+;; anything, apply-generic should fail if both arguments are of the same type
+;; and the desired operation does not exist for this type. He is correct in one
+;; sense though: apply-generic currently only works as long as no one has
+;; "helpfully" defined identity type conversion procedures, so it should be
+;; modified to ignore these procedures (as we will do in part c).
+
+;; c)
+
+(define (apply-generic op . args)
+  (define (err op type-tags)
+    (error "No method found for these types"
+           (list op type-tags)))
+  (let ((type-tags (map type-tag args)))
+    (let ((proc (get op type-tags)))
+      (if proc
+          (apply proc (map contents args))
+          (if (= (length args) 2)
+              (let ((type1 (car type-tags))
+                    (type2 (cadr type-tags)))
+                (if (eq? type1 type2) ; If types are equal casting won't help.
+                    (err op type-tags)
+                    (let ((a1 (car args))
+                          (a2 (cadr args))
+                          (t1->t2 (get-coercion type1 type2))
+                          (t2->t1 (get-coercion type2 type1)))
+                      (cond (t1->t2
+                             (apply-generic op (t1->t2 a1) a2))
+                            (t2->t1
+                             (apply-generic op a1 (t2->t1 a2)))
+                            (else
+                             (err op type-tags))))))
+              (err (list op type-tags)))))))
