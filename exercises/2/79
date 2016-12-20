@@ -1,0 +1,12 @@
+(define (install-equality-package)
+  (define (equ-complex? x y)
+    (and (= (apply-generic 'real-part x)
+            (apply-generic 'real-part y))
+         (= (apply-generic 'imag-part x)
+            (apply-generic 'imag-part y))))
+
+  ;; Register the methods
+  (put 'equ '(scheme-number scheme-number) =)
+  (put 'equ '(rational rational) equal?)
+  (put 'equ '(complex complex) equ-complex?)
+  'done)

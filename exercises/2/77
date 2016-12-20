@@ -1,0 +1,20 @@
+This works because the real-part, imag-part, magnitude, and angle functions have
+previously been defined to work on both varieties of complex numbers by
+dispatching on the "polar" or "rectangular" tag. The only thing that needs to be
+done to make them available in the new arithmetic system is to register them
+under the tag "complex".
+
+Here's an example: Take (magnitude z), where z is '(complex (rectangular (3
+4))).
+
+(magnitude z)
+=> (apply-generic 'magnitude '(complex (rectangular (3 4)))
+=> (magnitude (rectangular (3 4)))
+=> (apply-generic 'magnitude '(rectangular (3 4)))
+=> (sqrt (+ (square (real-part '(3 4)))
+            (square (imag-part '(3 4)))))
+=> 5
+
+Thus, apply-generic is invoked twice, the first time invoking the magnitude
+procedure in global scope, the second time invoking the magnitude procedure
+inside the rectangular package.
