@@ -1,0 +1,9 @@
+The generic operations with explicit dispatch approach can be extended with new
+operations without modifying existing code, but adding a new data type requires
+changing every function currently in existence.
+
+The message passing style can be extended with new data types without modifying
+existing code, but adding a new operation requires modifying every data type.
+
+The data directed style is the most flexible of all: new operations and new data
+types can both be added without changing any existing code.

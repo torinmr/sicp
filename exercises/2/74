@@ -1,0 +1,44 @@
+;; a) We assume that each site's data file is structured as a pair, where the
+;; car is an identifier for their site, and the cdr is an arbitrary data
+;; structure containing their data. We furthermore assume that each site
+;; registers a get-record procedure with the signature (get-record id set) under
+;; their site ID, e.g. by calling (put 'get-record 'site01 my-get-record).
+
+(define (get-record employee file)
+  ((get 'get-record (car file)) employee (cdr file)))
+
+;; b) In addition to the assumptions from (a), we assume each site has
+;; registered a get-salary procedure with the signature (get-salary
+;; employee-record) in the same manner specified above.
+
+(define (get-salary employee file)
+  ((get 'get-salary (car file)) (get-record employee file)))
+
+;; An alternative implementation of (a) and (b) would assume that any one
+;; company used a single set representation for both levels of their index
+;; (i.e. the employee index and the individual employee records), and have each
+;; company register a single lookup procedure. It would additionally assume that
+;; salary records were always keyed under "salary". Then we could write:
+
+(define (get-record employee file)
+  ((get 'lookup (car file)) employee (cdr file)))
+
+(define (get-salary employee file)
+  ((get 'lookup (car file)) 'salary (get-record employee file)))
+
+;; c)
+
+(define (find-employee-record employee files)
+  (if (null? files)
+      false
+      (let ((first-result (get-record employee (car files))))
+        (if first-result
+            first-result
+            (find-employee-record employee (cdr files))))))
+
+;; d) The company must change it's data file to consist of a tagged pair as
+;; described in (a). Furthermore, if the first described representation is used
+;; it must register get-record, get-salary, etc. procedures. If the second
+;; described representation is used, it must only register a lookup procedure,
+;; but must also ensure that it's records use the consistent naming scheme
+;; ("salary" for salary, etc.)
