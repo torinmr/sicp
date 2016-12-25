@@ -1,0 +1,45 @@
+(define (apply-generic op . args)
+  (define (err op type-tags)
+    (error "No method found for these types"
+           (list op type-tags)))
+
+  ;; Return #f if cast is not possible, otherwise return list of converted args.
+  (define (try-casting-to target-type args)
+    (if (null? args)
+        '()
+        (let ((rest (try-casting-to target-type (cdr args))))
+          (if (eq? false rest)
+              false
+              (let ((arg (car args)))
+                (let ((type (type-tag arg)))
+                  (let ((conversion (get-coercion type target-type)))
+                    (if conversion
+                        (cons (conversion arg) rest)
+                        false))))))))
+
+  ;; Try each of the target-types in turn, returning the result of the first
+  ;; successful one, or an error if none are successful.
+  (define (iter-types target-types args original-type-tags)
+    (if (null? target-types)
+        (err op original-type-tags)
+        (let ((result (try-casting-to (car target-types) args)))
+          (if result
+              (let ((type-tags (map type-tag result)))
+                (let ((proc (get op type-tags)))
+                  (if proc
+                      (apply proc (map contents result))
+                      (iter-types (cdr target-types) args original-type-tags))))
+              (iter-types (cdr target-types) args original-type-tags)))))
+
+  ;; First try the args as is, then defer to iter-types.
+  (let ((type-tags (map type-tag args)))
+    (let ((proc (get op type-tags)))
+      (if proc
+          (apply proc (map contents args))
+          (iter-types type-tags args type-tags)))))
+
+;; This strategy won't work when there is a mixed-type option in the table that
+;; is not equal to the original types. For example, suppose we are given types
+;; (integer, rational). There is no operation on these types, or on (rational,
+;; rationar), but there is one defined on (integer, complex). This algorithm
+;; will not find it.
