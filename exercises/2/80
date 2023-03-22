@@ -3,8 +3,7 @@
     (and (= 0 (car x))
          (not (= 0 (cdr x)))))
   (define (=zero-complex? x)
-    (and (= 0 (apply-generic 'real-part x))
-         (= 0 (apply-generic 'imag-part x))))
+    (= 0 (magnitude x)))
 
   ;; Register the methods
   (put '=zero? '(scheme-number) zero?)
